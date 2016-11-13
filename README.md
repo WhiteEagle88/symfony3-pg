@@ -1,11 +1,11 @@
 # Create container
 ```
-docker run -it -d --name=symfony3 -h=symfony3 -p 1080:80 -p 1022:22 -p 9001:9000 cristo/symfony3 /bin/bash
+docker run -it -d --name=symfony3 -h=symfony3 -p 1080:80 -p 1022:22 -p 9001:9000 eagle88/symfony3-pg /bin/bash
 ```
-# MySQL
+# PostgreSQL
 ```
-user: root 
-password: root
+user: docker 
+password: docker
 ```
 # SSH as docker user in Groups: www-data,sudo
 ```
@@ -89,5 +89,5 @@ Go to: Languages & Frameworks > PHP > Debug > DBGp Proxy and set the following s
     Port: 9001
 ```
 # Origin
-[Docker Hub] (https://registry.hub.docker.com/u/cristo/symfony3/)
-[Git Hub] (https://github.com/monte-fm/symfony3)
+[Docker Hub] (https://registry.hub.docker.com/u/eagle88/symfony3-pg/)
+[Git Hub] (https://github.com/WhiteEagle88/symfony3-pg)
