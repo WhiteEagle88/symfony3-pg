@@ -53,14 +53,6 @@ VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
 
 USER root
-RUN wget https://repo.percona.com/apt/percona-release_0.1-4.$(lsb_release -sc)_all.deb
-RUN dpkg -i percona-release_0.1-4.$(lsb_release -sc)_all.deb
-RUN rm percona-release_0.1-4.$(lsb_release -sc)_all.deb
-RUN apt-get update
-RUN echo "percona-server-server-5.7 percona-server-server/root_password password root" | sudo debconf-set-selections
-RUN echo "percona-server-server-5.7 percona-server-server/root_password_again password root" | sudo debconf-set-selections
-RUN apt-get install -y percona-server-server-5.7
-COPY configs/mysql/my.cnf /etc/mysql/my.cnf
 
 # SSH service
 RUN sudo apt-get install -y openssh-server openssh-client
