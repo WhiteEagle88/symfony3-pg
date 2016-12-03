@@ -39,18 +39,18 @@ COPY configs/php/xdebug.ini /etc/php/7.0/mods-available/xdebug.ini
 RUN ln -s /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.ini
 RUN ln -s /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini
 
-#Install PostgreSQL 9.3 server
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-RUN apt-get update && apt-get install -y postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
+#Install PostgreSQL 9.6 server
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+RUN apt-get update && apt-get install -y postgresql-9.6 postgresql-client-9.6 postgresql-contrib-9.6 postgis
 USER postgres
 RUN /etc/init.d/postgresql start &&\
     psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
     createdb -O docker docker
-RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
-RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.6/main/pg_hba.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.6/main/postgresql.conf
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
-CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
+CMD ["/usr/lib/postgresql/9.6/bin/postgres", "-D", "/var/lib/postgresql/9.6/main", "-c", "config_file=/etc/postgresql/9.6/main/postgresql.conf"]
 
 USER root
 
@@ -113,6 +113,17 @@ COPY configs/files/etckeeper-hook.sh /root/etckeeper/etckeeper-hook.sh
 RUN chmod +x /root/etckeeper/*.sh
 RUN chmod +x /root/*.sh
 RUN /root/etckeeper.sh
+
+#Install Elasticsearch
+RUN wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -
+RUN echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | tee /etc/apt/sources.list.d/elasticsearch.list
+RUN apt-get -y update
+RUN apt-get install -y elasticsearch
+RUN update-rc.d elasticsearch defaults
+RUN service elasticsearch restart
+RUN /usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head
+RUN /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
+COPY configs/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
 #open ports
 EXPOSE 80 22 9000 5432

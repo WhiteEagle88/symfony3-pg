@@ -1,0 +1,10 @@
+cluster.name: "cluster_name"
+node.name: "node_name"
+node.max_local_storage_nodes: 1
+index.number_of_replicas: 0
+gateway.expected_nodes: 1
+script.groovy.sandbox.enabled: false
+script.disable_dynamic: false
+script.default_lang: groovy
+marvel.agent.enabled: false
+node.local: true
