@@ -126,4 +126,4 @@ RUN /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
 COPY configs/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
 #open ports
-EXPOSE 80 22 9000 9002 5432
+EXPOSE 80 22 9000 9200 5432
