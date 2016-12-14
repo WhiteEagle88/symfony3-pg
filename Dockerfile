@@ -132,7 +132,8 @@ RUN set -ex \
 		chown -R elasticsearch:elasticsearch "$path"; \
 	done
 
-COPY config ./config
+COPY configs/elasticsearch/elasticsearch.yml ./config/elasticsearch.yml
+COPY configs/elasticsearch/log4j2.properties ./config/log4j2.properties
 
 RUN update-rc.d elasticsearch defaults
 RUN service elasticsearch restart
