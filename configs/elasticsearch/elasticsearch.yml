@@ -1,10 +1,6 @@
-cluster.name: "cluster_name"
-node.name: "node_name"
-node.max_local_storage_nodes: 1
-index.number_of_replicas: 0
-gateway.expected_nodes: 1
-script.groovy.sandbox.enabled: false
-script.disable_dynamic: false
-script.default_lang: groovy
-marvel.agent.enabled: false
-node.local: true
+
+network.host: 0.0.0.0
+
+# this value is required because we set "network.host"
+# be sure to modify it appropriately for a production cluster deployment
+discovery.zen.minimum_master_nodes: 1
