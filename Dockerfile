@@ -12,7 +12,7 @@ RUN chown -R docker:www-data /home/docker
 
 #install Software
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y apt-transport-https software-properties-common python-software-properties \
+RUN apt-get install -y software-properties-common python-software-properties \
     git git-core vim nano mc nginx screen curl unzip wget \
     supervisor memcached htop tmux zip
 COPY configs/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
@@ -114,12 +114,9 @@ RUN chmod +x /root/etckeeper/*.sh
 RUN chmod +x /root/*.sh
 RUN /root/etckeeper.sh
 
-#Install Elasticsearch
-ENV ELASTICSEARCH_DEB_VERSION 5.0.0
-RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-RUN echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-5.x.list
-RUN apt-get -y update
-RUN apt-get install -y --no-install-recommends "elasticsearch=$ELASTICSEARCH_DEB_VERSION"
+#Install Elasticsearc
+RUN wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.0.0.deb && dpkg -i elasticsearch-5.0.0.deb
+
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
 WORKDIR /usr/share/elasticsearch
